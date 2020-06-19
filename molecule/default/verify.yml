@@ -1,0 +1,9 @@
+- name: Verify
+  hosts: all
+  tasks:
+  - stat:
+      path: $HOME/www
+    register: p
+  - assert:
+      that:
+        - p.stat.isdir is defined and p.stat.isdir
