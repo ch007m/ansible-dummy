@@ -4,6 +4,6 @@
   collections:
     - snowdrop.kubernetes
   tasks:
-    - name: "Include kind"
-      include_role:
-        name: "kind"
+  - name: "Include kind"
+    include_role:
+      name: "kind"

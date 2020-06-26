@@ -1,2 +1,3 @@
----
-# tasks file for kind
+- shell: echo 'Hello World'
+  register: msg
+- debug: msg="the echo was {{ msg.stdout }}"

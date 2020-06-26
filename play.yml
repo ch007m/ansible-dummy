@@ -8,5 +8,5 @@
     kind:
       cluster_name: my-k8s
       version: "1.17"
-  # - include_role:
-  #     name: "kind"
+  - include_role:
+      name: "kind"

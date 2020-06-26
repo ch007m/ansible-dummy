@@ -104,7 +104,10 @@ EOF
       }
   }
   ```
- 
+- Uncomment the line of the `play.yml` playbook to include the role and test it
+  ```bash
+  ansible-playbook ./play.yml
+  ```
 ## Testing
 
 - Install the module dependency
