@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include ansible-dummy"
-      include_role:
-        name: "ansible-dummy"

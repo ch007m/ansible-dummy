@@ -1,9 +1,0 @@
----
-- name: Ensure the server is stopped
-  hcloud_server:
-    name: my-server
-    state: stopped
-- name: Creates directory
-  file:
-    path: $HOME/www
-    state: directory
