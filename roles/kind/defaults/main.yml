@@ -1,2 +1,18 @@
----
-# defaults file for kind
+kind_os_matrix:
+  linux:
+    - Fedora
+    - CentOS
+    - RedHat
+  brew:
+    - MacOSX
+
+kind_client_path: /usr/local/bin/kind
+kind_force_client_install: false
+kind_client_dest: /usr/local/bin
+kind_prefix_mac: kind-darwin
+kind_prefix_linux: kind-linux
+
+github_api: https://api.github.com/repos
+github_owner: kubernetes-sigs
+github_repo: kind
+github_tag: v0.8.1

@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
   options:
-    requirement-files: ../resources/collections.yml
+    requirements-file: ../resources/collections.yml
 driver:
   name: docker
 platforms:
