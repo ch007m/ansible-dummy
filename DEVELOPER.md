@@ -62,8 +62,8 @@ EOF
   ```
 - Build and import the collection
   ```bash
-  ansible-galaxy collection build
-  Created collection for snowdrop.kubernetes at /Users/cmoullia/code/ch007m/ansible-kind/snowdrop-kubernetes-1.0.0.tar.gz -f
+  ansible-galaxy collection build -f
+  Created collection for snowdrop.kubernetes at /Users/cmoullia/code/ch007m/ansible-kind/snowdrop-kubernetes-1.0.0.tar.gz 
   
   ansible-galaxy collection install snowdrop-kubernetes-1.0.0.tar.gz -f 
   Process install dependency map
@@ -107,6 +107,11 @@ EOF
 - Uncomment the line of the `play.yml` playbook to include the role and test it
   ```bash
   ansible-playbook ./play.yml
+  ...
+  TASK [snowdrop.kubernetes.kind : debug] ********************************************************************************************************************************************************************************************
+  ok: [localhost] => {
+      "msg": "Hello world!"
+  }
   ```
 ## Testing
 
