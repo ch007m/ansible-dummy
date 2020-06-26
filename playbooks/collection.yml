@@ -4,8 +4,8 @@
   collections:
   - snowdrop.kubernetes
   tasks:
-  #- include_role:
-  #    name: "kind"
+  - include_role:
+      name: "kind"
   - name: Create a K8s cluster
     kind:
       cluster_name: my-k8s

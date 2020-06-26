@@ -1,11 +1,24 @@
-- name: Check if kind binary exists
+- name: Check if 'kind' binary is Present
   stat:
-    path: "{{ kind_client_path }}"
-  register: kind_client
+    path: "{{ kind_binary }}"
+  register: kind_binary_present
 
-- name: Get the client assets from github
-  include_tasks: github_assets.yml
+- name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
+  get_url:
+    url: "https://github.com/kubernetes-sigs/kind/releases/download/{{ kind_archive_name }}"
+    dest: "{{ kind_binary }}"
+    mode: '0755'
+  when: not kind_binary_present.stat.exists
 
-- name: Install the kind binary client
-  include_tasks: install_kind_client.yml
-  when: not kind_client.stat.exists or kind_force_client_install
+
+#- name: Check if kind binary exists
+#  stat:
+#    path: "{{ kind_client_path }}"
+#  register: kind_client
+
+#- name: Get the client assets from github
+#  include_tasks: github_assets.yml
+
+#- name: Install the kind binary client
+#  include_tasks: install_kind_client.yml
+#  when: not kind_client.stat.exists or kind_force_client_install

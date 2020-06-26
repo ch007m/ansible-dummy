@@ -1,10 +1,16 @@
 Table of Contents
 =================
 
-  * [Instructions](#instructions)
-  * [Testing](#testing)
+   * [To install kind](#to-install-kind)
+   * [Instructions](#instructions)
+   * [Testing](#testing)
+   * [Lint](#lint)
 
- ## Instructions
+## To install kind
+
+    $ ANSIBLE_ROLES_PATH=$(pwd)/roles ansible-playbook ./playbooks/role.yml -e kind_version=v0.8.0
+
+## Instructions
  
 Commands executed to create a collection containing a module, role and molecule test
 

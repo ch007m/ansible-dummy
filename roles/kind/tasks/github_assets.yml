@@ -1,0 +1,42 @@
+- name: Show the URL of the tag release
+  debug: msg="Accessing release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
+  when: github_tag != ""
+
+- name: Get the tagged release
+  uri:
+    url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
+  register: release
+  when: github_tag != ""
+
+- name: Set release
+  set_fact:
+    assets_url: "{{ release.json.assets_url }}"
+  when: github_tag != ""
+
+- name: Show the URL of the release
+  debug: msg="Accessing release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+  when: github_tag == ""
+
+- name: Get the latest release
+  uri:
+    url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+  register: release
+  when: github_tag == ""
+
+- name: Set release
+  set_fact:
+    assets_url: "{{ release.json.assets_url }}"
+  when: github_tag == ""
+
+- name: Should have an assets_url
+  assert:
+    that: assets_url is defined
+
+- name: debug
+  debug:
+    var: assets_url
+
+- name: Get the list of assets
+  uri:
+    url: "{{ assets_url }}"
+  register: assets
