@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  collections:
+    - snowdrop.kubernetes
+  tasks:
+    - name: "Include kind"
+      include_role:
+        name: "kind"
