@@ -1,9 +1,11 @@
 - name: Verify
   hosts: all
   tasks:
-  - stat:
+  - name: Check if the directory www exists
+    stat:
       path: $HOME/www
     register: p
-  - assert:
+  - name: Verify if the folder exits
+    assert:
       that:
         - p.stat.isdir is defined and p.stat.isdir
