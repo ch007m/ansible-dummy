@@ -1,14 +1,15 @@
 ---
 dependency:
   name: galaxy
-  options:
-    requirement-files: ../resources/collections.yml
 driver:
-  name: docker
+  name:  delegated
+  options:
+    managed: False
+    ansible_connection_options:
+      ansible_connection: local
 platforms:
   - name: instance
     image: docker.io/pycontribs/centos:7
-    #image: docker.io/centos/systemd:latest
     pre_build_image: true
     privileged: true
 provisioner:
@@ -30,7 +31,7 @@ scenario:
   test_sequence:
     - dependency
     # - lint
-    - cleanup
+    # - cleanup
     - destroy
     - syntax
     - create
