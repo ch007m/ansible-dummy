@@ -1,5 +1,11 @@
-## Instructions
+Table of Contents
+=================
 
+      * [Instructions](#instructions)
+      * [Testing](#testing)
+
+ ## Instructions
+ 
 Commands executed to create a collection containing a module, role and molecule test
 
 - Create an ansible collection hosting the role, plugins/module
@@ -13,11 +19,7 @@ Commands executed to create a collection containing a module, role and molecule 
 - Create now the folders structure of the `role`
   ```bash
   ansible-galaxy role init --init-path roles kind
-  ```
-- Move to the role and instantiate the molecule project
-  ```bash
-  cd roles/kind && molecule init scenario --role-name kind && cd ../..
-  ```  
+  ``` 
 - Finally create a dummy module
   ```bash
   mkdir plugins/modules && touch plugins/modules/kind.py
@@ -102,6 +104,49 @@ EOF
       }
   }
   ```
-  
-    
+ 
+## Testing
+
+- Install the module dependency
+  ```bash
+  pip3 install molecule
+  ```
+- Instantiate the `molecule testing` project
+  ```bash
+  molecule init scenario --role-name kind
+  ``` 
+- Create a new folder containing the resources needed to run the tests using playbooks, templates, vars ...
+  ```bash
+  mkdir -p molecule/resources
+  ``` 
+- Move under the `resources` folder, the yml files of the scenario to play except the file `molecule.yml`
+  ```bash
+  mv ./molecule/default/^molecule.yml* ./molecule/resources
+  ```
+- Reconfigure the molecule.yml file to point to the resource files
+  ```bash
+  ---
+  dependency:
+    name: galaxy
+  driver:
+    name: docker
+  platforms:
+    - name: instance
+      image: docker.io/pycontribs/centos:7
+      pre_build_image: true
+  provisioner:
+    name: ansible
+    playbooks:
+        converge: ../resources/converge.yml
+        # prepare: ../resources/prepare.yml
+        verify: ../resources/verify.yml
+  verifier:
+    name: ansible
+  ``` 
+        
+- Launch docker and test it
+  ```bash
+  molecule test
+  ``` 
+- TODO: Expand this section when more stuff will be ready to test     
   
