@@ -1,8 +1,8 @@
 Table of Contents
 =================
 
-      * [Instructions](#instructions)
-      * [Testing](#testing)
+  * [Instructions](#instructions)
+  * [Testing](#testing)
 
  ## Instructions
  
