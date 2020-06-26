@@ -7,6 +7,7 @@ platforms:
   - name: instance
     image: docker.io/pycontribs/centos:7
     pre_build_image: true
+    privileged: true
 provisioner:
   name: ansible
   playbooks:
@@ -26,7 +27,7 @@ scenario:
   test_sequence:
     - dependency
     # - lint
-    - cleanup
+    # - cleanup
     - destroy
     - syntax
     - create
