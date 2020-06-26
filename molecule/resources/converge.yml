@@ -3,6 +3,8 @@
   hosts: all
   collections:
     - snowdrop.kubernetes
+  #environment:
+  #  ANSIBLE_ROLES_PATH: ../../roles
   tasks:
   - name: "Include kind"
     include_role:

@@ -10,8 +10,30 @@ platforms:
 provisioner:
   name: ansible
   playbooks:
+    cleanup: ../resources/cleanup.yml
     converge: ../resources/converge.yml
     # prepare: ../resources/prepare.yml
     verify: ../resources/verify.yml
+  env:
+    ANSIBLE_ROLES_PATH: ../../roles
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 verifier:
   name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    # - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    #- idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

@@ -158,3 +158,34 @@ EOF
   ``` 
 - TODO: Expand this section when more stuff will be ready to test     
   
+## Lint
+
+- To use lint, please add the following requirement/package
+  ```bash
+  pip3 install ansible-lint
+  ```
+- Next lint your project
+  ```bash
+   molecule lint 
+  --> Test matrix
+      
+  └── default
+      ├── dependency
+      └── lint
+      
+  --> Scenario: 'default'
+  --> Action: 'dependency'
+  Skipping, missing the requirements file.
+  Skipping, missing the requirements file.
+  --> Scenario: 'default'
+  --> Action: 'lint'
+  --> Executing: set -e
+  yamllint .
+  ansible-lint
+  ./galaxy.yml
+    3:81      error    line too long (112 > 80 characters)  (line-length)
+    4:81      error    line too long (113 > 80 characters)  (line-length)
+    6:1       warning  missing document start "---"  (document-start)
+    14:81     error    line too long (97 > 80 characters)  (line-length)
+  ...
+  ```  

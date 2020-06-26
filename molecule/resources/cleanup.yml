@@ -1,0 +1,6 @@
+---
+- name: Cleanup
+  hosts: all
+  tasks:
+  - name: "Clean up the machine"
+    shell: echo "Clean up the machine"
