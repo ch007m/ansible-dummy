@@ -2,15 +2,15 @@
 
 Commands executed to create a collection containing a module, role and molecule test
 
-- Create an ansible collection hosting the role, module, plugins
+- Create an ansible collection hosting the role, plugins/module
   ```bash
   ansible-galaxy collection init snowdrop.kubernetes --init-path ansible-kind
   ```
-- Move to the project created and move the content of the collection to the parent folder
+- Move the content of the collection to the parent folder
   ```bash
-  cd ansible-kind && mv snowdrop/kubernetes/* . && rm -rf snozdrop/kubernetes
+  cd ansible-kind && mv snowdrop/kubernetes/* . && rm -rf snowdrop/kubernetes
   ``` 
-- Create now the folders structure of the `kind role`
+- Create now the folders structure of the `role`
   ```bash
   ansible-galaxy role init --init-path roles kind
   ```
