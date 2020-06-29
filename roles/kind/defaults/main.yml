@@ -1,21 +1,23 @@
 # Using github api
-kind_client_path: /usr/local/bin/kind
-kind_client_dest: /usr/local/bin
-kind_force_client_install: false
-
-kind_prefix_mac: kind-darwin
-kind_prefix_linux: kind-linux
-
-github_api: https://api.github.com/repos
-github_tag: v0.8.1
+# kind_client_path: /usr/local/bin/kind
+# kind_client_dest: /usr/local/bin
+# kind_force_client_install: false
+#
+# kind_prefix_mac: kind-darwin
+# kind_prefix_linux: kind-linux
+#
+# github_api: https://api.github.com/repos
+# github_tag: v0.8.1
 
 # New get_url
+github_api: https://api.github.com/repos
 github_owner: kubernetes-sigs
 github_repo: kind
+github_tag: "{{ kind_version }}"
 asset_mode: 0755
 
 # Using get_url
-kind_version: v0.8.1
-kind_archive_name: "{{ kind_version }}/kind-{{ ansible_system | lower }}-amd64"
-kind_binary_directory: /usr/local/bin
-kind_binary: "{{ kind_binary_directory}}/kind"
+kind_version:
+#kind_archive_name: "{{ kind_version }}/kind-{{ ansible_system | lower }}-amd64"
+target_path: /usr/local/bin
+kind_executable_name: kind

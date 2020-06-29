@@ -1,7 +1,28 @@
-- name: Check if 'kind' binary is Present
+- name: Check if 'kind' binary exists
   stat:
-    path: "{{ kind_binary }}"
+    path: "{{ target_path}}/{{ kind_executable_name }}"
   register: kind_binary_present
+
+- name: Fetch github assets
+  include_tasks: github_assets.yml
+
+- debug: msg="Version {{ github_tag }}"
+- debug: msg="Content {{ releases }}"
+
+- name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
+  get_url:
+    url: https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/releases/assets/{{ id }}
+    headers:
+      Accept: application/octet-stream
+    dest: "{{ target_path }}/{{ kind_executable_name }}"
+    mode: "{{ asset_mode }}"
+    force: "{{ kind_force_client_install | bool }}"
+  when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
+  vars:
+    release_data: "{{ releases.json|to_json }}"
+    arch: "{{ ansible_system|lower }}-{{ arch_map[ansible_userspace_architecture] }}"
+    id: "{{ release_data|from_json|json_query('assets[?ends_with(@.name, `' ~ arch ~ '`)] | [0].id') }}"
+
 
 # - name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
 #   get_url:
@@ -10,26 +31,6 @@
 #     mode: '0755'
 #     force: "{{ kind_force_client_install | bool }}"
 #   when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
-
-- name: Populate the github uri
-  uri:
-    url: https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/releases/latest
-    return_content: yes
-  register: releases
-
-- name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
-  get_url:
-    url: https://api.github.com/repos/{{ github_owner }}/{{ github_repo }}/releases/assets/{{ id }}
-    headers:
-      Accept: application/octet-stream
-    dest: "{{ kind_binary }}"
-    mode: "{{ asset_mode }}"
-    force: "{{ kind_force_client_install | bool }}"
-  when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
-  vars:
-    release_data: "{{ releases.json|to_json }}"
-    arch: "{{ ansible_system|lower }}-{{ arch_map[ansible_userspace_architecture] }}"
-    id: "{{ release_data|from_json|json_query('assets[?ends_with(@.name, `' ~ arch ~ '`)] | [0].id') }}"
 
 
 #- name: Check if kind binary exists
