@@ -20,7 +20,7 @@
         url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
         return_content: yes
       register: assets
-  when: github_tag != ""
+  when: github_tag != ''
 
 - debug: msg="github var {{ github_tag }}, json content {{ assets }}"
 
