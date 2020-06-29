@@ -1,11 +1,3 @@
-kind_os_matrix:
-  linux:
-    - Fedora
-    - CentOS
-    - RedHat
-  brew:
-    - MacOSX
-
 # Using github api
 kind_client_path: /usr/local/bin/kind
 kind_client_dest: /usr/local/bin
@@ -15,9 +7,12 @@ kind_prefix_mac: kind-darwin
 kind_prefix_linux: kind-linux
 
 github_api: https://api.github.com/repos
+github_tag: v0.8.1
+
+# New get_url
 github_owner: kubernetes-sigs
 github_repo: kind
-github_tag: v0.8.1
+asset_mode: 0755
 
 # Using get_url
 kind_version: v0.8.1
