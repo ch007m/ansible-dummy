@@ -1,3 +1,13 @@
+- name: Set the value of the github_tag if a kind version is specified
+  set_fact:
+    github_tag: "{{ kind_version }}"
+  when: kind_version != ""
+
+- name: Set force yes or no when kind must be re-installed
+  set_fact:
+    force: yes
+  when: kind_force_client_install | bool == true
+
 - name: Check if 'kind' binary exists
   stat:
     path: "{{ target_path}}/{{ kind_executable_name }}"
@@ -28,7 +38,7 @@
       Accept: application/octet-stream
     dest: "{{ target_path }}/{{ kind_executable_name }}"
     mode: "{{ asset_mode }}"
-    force: "{{ kind_force_client_install | bool }}"
+    force: "{{ force }}"
   when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
   vars:
     release_data: "{{ assets.json|to_json }}"

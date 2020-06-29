@@ -2,7 +2,7 @@
 github_api: https://api.github.com/repos
 github_owner: kubernetes-sigs
 github_repo: kind
-github_tag: "{{ kind_version }}"
+github_tag: ""
 asset_mode: 0755
 
 # Kind
@@ -10,3 +10,6 @@ kind_version: ""
 target_path: /usr/local/bin
 kind_executable_name: kind
 kind_force_client_install: false
+
+# Get_url variable
+force: false
