@@ -3,28 +3,23 @@
     path: "{{ target_path}}/{{ kind_executable_name }}"
   register: kind_binary_present
 
-#- name: Fetch github assets
-#  include_tasks: github_assets.yml
-
 - name: Show the URL and get the tagged release
   block:
   - debug: msg="Accessing the tagged release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
   - uri:
       url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
       return_content: yes
-    register: releases
+    register: assets
   when: github_tag != ""
 
-- name: Show the URL of the release and get it
+- name: Show the URL of the latest release and get it
   block:
-  - debug: msg="Accessing the latest release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
-  - uri:
-      url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
-      return_content: yes
-    register: releases
+    - debug: msg="Accessing the latest release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+    - uri:
+        url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+        return_content: yes
+      register: assets
   when: github_tag == ""
-
-- debug: msg="Version {{ github_tag }}, {{ releases }}"
 
 - name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
   get_url:
@@ -36,28 +31,6 @@
     force: "{{ kind_force_client_install | bool }}"
   when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
   vars:
-    release_data: "{{ releases.json|to_json }}"
+    release_data: "{{ assets.json|to_json }}"
     arch: "{{ ansible_system|lower }}-{{ arch_map[ansible_userspace_architecture] }}"
     id: "{{ release_data|from_json|json_query('assets[?ends_with(@.name, `' ~ arch ~ '`)] | [0].id') }}"
-
-
-# - name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
-#   get_url:
-#     url: "https://github.com/kubernetes-sigs/kind/releases/download/{{ kind_archive_name }}"
-#     dest: "{{ kind_binary }}"
-#     mode: '0755'
-#     force: "{{ kind_force_client_install | bool }}"
-#   when: not kind_binary_present.stat.exists or kind_force_client_install | bool == true
-
-
-#- name: Check if kind binary exists
-#  stat:
-#    path: "{{ kind_client_path }}"
-#  register: kind_client
-
-#- name: Get the client assets from github
-#  include_tasks: github_assets.yml
-
-#- name: Install the kind binary client
-#  include_tasks: install_kind_client.yml
-#  when: not kind_client.stat.exists or kind_force_client_install
