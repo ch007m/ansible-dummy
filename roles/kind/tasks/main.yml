@@ -3,11 +3,28 @@
     path: "{{ target_path}}/{{ kind_executable_name }}"
   register: kind_binary_present
 
-- name: Fetch github assets
-  include_tasks: github_assets.yml
+#- name: Fetch github assets
+#  include_tasks: github_assets.yml
 
-- debug: msg="Version {{ github_tag }}"
-- debug: msg="Content {{ releases }}"
+- name: Show the URL and get the tagged release
+  block:
+  - debug: msg="Accessing the tagged release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
+  - uri:
+      url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
+      return_content: yes
+    register: releases
+  when: github_tag != ""
+
+- name: Show the URL of the release and get it
+  block:
+  - debug: msg="Accessing the latest release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+  - uri:
+      url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+      return_content: yes
+    register: releases
+  when: github_tag == ""
+
+- debug: msg="Version {{ github_tag }}, {{ releases }}"
 
 - name: Download 'kind' binary from github release & install it if missing from /usr/local/bin directory
   get_url:

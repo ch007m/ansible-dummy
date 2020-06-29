@@ -9,6 +9,9 @@
   register: releases
   when: github_tag != ""
 
+- debug: msg="Version {{ github_tag }}"
+- debug: msg="Content {{ releases }}"
+
 - name: Show the URL of the release
   debug: msg="Accessing the lastest release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
   when: github_tag == ""
@@ -19,3 +22,6 @@
     return_content: yes
   register: releases
   when: github_tag == ""
+
+- debug: msg="Version {{ github_tag }}"
+- debug: msg="{{ releases.json }}"
