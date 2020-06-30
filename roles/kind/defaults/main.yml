@@ -2,7 +2,6 @@
 github_api: https://api.github.com/repos
 github_owner: kubernetes-sigs
 github_repo: kind
-github_tag: ""
 asset_mode: 0755
 
 # Kind

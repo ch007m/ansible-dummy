@@ -1,9 +1,14 @@
-- name: Set the value of the github_tag if a kind version is specified
+- name: Set the value of the url and github_tag if a kind version is specified
   set_fact:
-    github_tag: "{{ kind_version }}"
+    github_url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ kind_version }}"
   when: kind_version != ""
 
-- name: Set force yes or no when kind must be re-installed
+- name: Set the value of the url to get the latest release
+  set_fact:
+    github_url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
+  when: kind_version == ""
+
+- name: Set force to yes when kind must be re-installed
   set_fact:
     force: yes
   when: kind_force_client_install | bool == true
@@ -13,27 +18,15 @@
     path: "{{ target_path}}/{{ kind_executable_name }}"
   register: kind_binary_present
 
-- name: Show the URL and get the tagged release
-  block:
-    - debug: msg="Accessing the tagged release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
-    - uri:
-        url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/tags/{{ github_tag }}"
+- block:
+    - debug: msg="Accessing the release ':' {{ github_url }}"
+    - name: Call github to get the asset information used next to download the binary
+      uri:
+        url: "{{ github_url }}"
         return_content: yes
-      register: assets
-  when: github_tag != ''
+      register: github_response
 
-- debug: msg="github var {{ github_tag }}, json content {{ assets }}"
-
-- name: Show the URL of the latest release and get it
-  block:
-    - debug: msg="Accessing the latest release at {{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
-    - uri:
-        url: "{{ github_api }}/{{ github_owner }}/{{ github_repo }}/releases/latest"
-        return_content: yes
-      register: assets
-  when: github_tag == ""
-
-- debug: msg="github var = {{ github_tag }}, json content = {{ assets }}"
+#- debug: msg="github content '{{ github_response }}'"
 
 - name: Download 'kind' binary from github & install it if missing from /usr/local/bin directory
   get_url:
@@ -45,6 +38,6 @@
     force: "{{ force }}"
   when: kind_force_client_install | bool == true or not kind_binary_present.stat.exists
   vars:
-    release_data: "{{ assets.json|to_json }}"
+    release_data: "{{ github_response.json|to_json }}"
     arch: "{{ ansible_system|lower }}-{{ arch_map[ansible_userspace_architecture] }}"
     id: "{{ release_data|from_json|json_query('assets[?ends_with(@.name, `' ~ arch ~ '`)] | [0].id') }}"
