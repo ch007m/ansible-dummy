@@ -1,18 +1,30 @@
 Table of Contents
 =================
 
-   * [To install kind](#to-install-kind)
-   * [Instructions](#instructions)
+   * [Role](#role)
+   * [Collection](#collection)
    * [Testing](#testing)
    * [Lint](#lint)
 
-## To install kind
+## Role
+
+- To install the `kind` binary using the releases published on github under `kubernetes-sigs/kind`, use the following command
 
     $ ANSIBLE_ROLES_PATH=$(pwd)/roles ansible-playbook ./playbooks/role.yml -e kind_version=v0.8.0
 
-## Instructions
+- You can install the latest release
+
+    $ ANSIBLE_ROLES_PATH=$(pwd)/roles ansible-playbook ./playbooks/role.yml
+    
+- Or force to reinstall `kind`
+   
+    $ ANSIBLE_ROLES_PATH=$(pwd)/roles ansible-playbook ./playbooks/role.yml \
+                           -e kind_version=v0.8.0 \
+                           -e kind_force_client_install=true
+
+## Collection
  
-Commands executed to create a collection containing a module, role and molecule test
+The following section explains how to build a collection containing a module, role and molecule tes ; next to install it
 
 - Create an ansible collection hosting the role, plugins/module
   ```bash
