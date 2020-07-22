@@ -43,7 +43,7 @@ Documentation for the collection.
         name: "kind"
   ```
   
-- Finally, call it
+- And finally, call it to execute the role
   ```bash
   ansible-playbook ./playbooks/collection.yml
   ```
